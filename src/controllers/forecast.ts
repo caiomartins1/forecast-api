@@ -1,22 +1,11 @@
-import { SetupServer } from '@src/server';
-import supertest from 'supertest';
+import { Controller, Get } from '@overnightjs/core';
+import { Request, Response } from 'express';
 
-type App = supertest.SuperTest<supertest.Test> | undefined;
-
-describe('Forecast functional tests', () => {
-  let _app: App;
-  beforeAll(() => {
-    const server = new SetupServer();
-    server.init();
-
-    _app = supertest(server.getApp());
-  });
-
-  it('should return a forecast with just a few times', async () => {
-    const app = _app as supertest.SuperTest<supertest.Test>;
-    const { body, status } = await app.get('/forecast');
-    expect(status).toBe(200);
-    expect(body).toEqual([
+@Controller('forecast')
+export class ForecastController {
+  @Get('')
+  public getForecastForLoggedUser(_: Request, res: Response): void {
+    res.json([
       {
         time: '2020-04-26T00:00:00+00:00',
         forecast: [
@@ -56,5 +45,5 @@ describe('Forecast functional tests', () => {
         ],
       },
     ]);
-  });
-});
+  }
+}
