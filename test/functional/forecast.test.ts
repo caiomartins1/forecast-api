@@ -1,20 +1,6 @@
-import { SetupServer } from '@src/server';
-import supertest from 'supertest';
-
-type App = supertest.SuperTest<supertest.Test> | undefined;
-
 describe('Forecast functional tests', () => {
-  let _app: App;
-  beforeAll(() => {
-    const server = new SetupServer();
-    server.init();
-
-    _app = supertest(server.getApp());
-  });
-
   it('should return a forecast with just a few times', async () => {
-    const app = _app as supertest.SuperTest<supertest.Test>;
-    const { body, status } = await app.get('/forecast');
+    const { body, status } = await global.testRequest.get('/forecast');
     expect(status).toBe(200);
     expect(body).toEqual([
       {
